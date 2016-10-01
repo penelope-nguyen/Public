@@ -3,7 +3,7 @@ def printBoard(aBoard):
     for row in board:
         print (" | ".join(row))
 
-def checkWin(listOfSpaces):
+def checkWin(p1, p2):
 
     winner = "" 
     winStates = [ [0,1,2],
@@ -16,10 +16,11 @@ def checkWin(listOfSpaces):
                   [2,4,6]
                  ]
 
+    # following code doesn't work, will fix after finishing homework (Oct. 1 2016) 
     for win in winStates:
-        if listOfSpaces[0] == win:
+        if p1 < win:
             winner = "__PLAYER ONE__" 
-        if listOfSpaces[1] == win:
+        if p2 < win:
             winner = "__PLAYER TWO__"
 
     return winner 
@@ -41,30 +42,31 @@ if player1 == choices[0]:
 else:
     player2 = choices[0] 
 
-print("these are the places where you can enter moves:\n")
+print("these are the places where you can enter moves:")
 
 printBoard(board)
 
-p1 = []
-p2 = []
-spacesUsed = [p1, p2]
+p1Spaces = []
+p2Spaces = []
 
 move = ''
 winner = ""
 
-for turn in range(0,9):
-    if turn >= 4:
-        winner = checkWin(spacesUsed)
+for turn in range(9):
+    if turn >= 5:
+        winner = checkWin(p1Spaces, p2Spaces) 
         if winner != "":
             break 
         
     if turn%2 == 0: #if turn is even 
         print("\n//PLAYER ONE'S TURN//")
-        move = player1 
+        move = player1
+        spacesUsed = p1Spaces
 
     else:
         print("\n//PLAYER TWO'S TURN//")
         move = player2
+        spacesUsed = p2Spaces
 
     while True:
         try:
@@ -72,7 +74,7 @@ for turn in range(0,9):
             if space not in range(0,9):
                 print("this number is not between 0-8") 
                 continue
-            if space in p1 or space in p2:
+            if space in p1Spaces or space in p2Spaces:
                 print("this space has already been used.")
                 continue
             break 
@@ -80,9 +82,11 @@ for turn in range(0,9):
             print ("that is not a valid number. Please try again. ")
 
 
-    spacesUsed[turn%2].append(space) 
-
-    board[int(space/3)][space%3] = move
+    spacesUsed.append(space) 
+        
+    row = space//3
+    column = space%3 
+    board[row][column] = move
     
     printBoard(board)
     
@@ -91,3 +95,5 @@ if winner != "":
 
 else:
     print ("NO ONE WON. :(") 
+
+exit() 
