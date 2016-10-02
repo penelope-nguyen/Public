@@ -31,10 +31,11 @@ choices = ['x', 'o']
 player1  = ''
 player2 = ''
 
-player1 = input('would you like to be x or o? ')
-
 p1Spaces = []
 p2Spaces = []
+
+player1 = input('would you like to be x or o? ')
+
 
 while player1 not in choices:
     player1 = input('that is not a valid choice. please try again: ')
