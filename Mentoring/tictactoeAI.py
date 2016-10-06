@@ -1,93 +1,146 @@
+import random
+
+winStates = [ [0,1,2],
+              [3,4,5],
+              [6,7,8],
+              [0,3,6],
+              [1,4,7],
+              [2,5,8],
+              [0,4,8],
+              [2,4,6]
+             ] 
+
+userSpaces = [0, 2, 5, 3]
+compSpaces = [0, 4, 2, 8]
+
+userSet = set(userSpaces)
+compSet = set(compSpaces)
+
+for state in winStates:
+    stateSet = set(state)
+    if len(stateSet & compSet) == 2:
+        possibleMoves = [stateSet - compSet] 
+        move = random.choice(possibleMoves)
+        print (possibleMoves, move) 
+    if len(stateSet & userSet)== 2:
+        possibleMoves = [stateSet - userSet] 
+        move = random.choice(possibleMoves)
+        print (possibleMoves, move) 
+
+    
+        
+    
+    
+""" import random
+
 def printBoard(aBoard):
     print ()
     for row in board:
         print (" | ".join(row))
 
-def checkWin(listOfSpaces):
+def compAI(turn, spaceListA, spaceListB):
+    corners = [0, 2, 6, 8]
+    if turn == 0:
+        return random.choice(corners)
 
-    winner = "" 
+    else:
+        return turn 
+    
+            
+def checkWin(p1, p2):
+
+    winner = "__NO ONE__" 
     winStates = [ [0,1,2],
                   [3,4,5],
                   [6,7,8],
                   [0,3,6],
                   [1,4,7],
-                  [2,5,6],
+                  [2,5,8],
                   [0,4,8],
                   [2,4,6]
                  ]
 
-    for win in winStates:
-        if listOfSpaces[0] == win:
-            winner = "__PLAYER ONE__" 
-        if listOfSpaces[1] == win:
-            winner = "__PLAYER TWO__"
+    for state in winStates:
+        
 
-    return winner 
+    return winner
     
 board = [ ['0', '1', '2'] , ['3', '4', '5'] , ['6', '7', '8'] ] 
     
-choices = ['x', 'o']
+playersMoves = [ ] 
 
-player1  = ''
-player2 = ''
+user = ''
+comp = ''
 
-player1 = raw_input("would you like to be x or o? ")
+userSpaces = []
+compSpaces = []
 
-while player1 not in choices:
-    player1 = input('that is not a valid choice. please try again: ')
+user = input('would you like to be x or o? ')
 
-if player1 == choices[0]:
-        player2 = choices[1]
+while (user != 'x') and  (user != 'o'): 
+    user = input('that is not a valid choice. please try again: ')
+    
+if user == 'x':
+    comp = 'o'
 else:
-    player2 = choices[0] 
+    comp = 'x' 
 
-print("these are the places where you can enter moves:\n")
+userTurn = input("would you like to be player one or player two? please enter one or two: ")
+while (userTurn  != "one") and (userTurn != "two"): 
+    userTurn = input("that is not a valid choice. the accepted answers are one or one: ")
 
+if userTurn == "one":
+    playersMoves.append(['user', user])
+    playersMoves.append(['comp', comp]) 
+else:
+    playersMoves.append(['comp', comp]) 
+    playersMoves.append(['user', user]) 
+
+
+print("these are the places where you can enter moves:")
 printBoard(board)
 
-p1 = []
-p2 = []
-spacesUsed = [p1, p2]
 
-move = ''
-winner = ""
+for turn in range(9):
+    if turn >= 4:  
+        winner = checkWin(p1Spaces, p2Spaces)
+        if winner != "__NO ONE__":
+            break
 
-for turn in range(0,9):
-    if turn >= 4:
-        winner = checkWin(spacesUsed)
-        if winner != "":
-            break 
+    
+    currentPlayer = playersMoves[turn%2][0] 
+
+    if currentPlayer == 'user':
+        move = playersMoves[turn%2][1] 
+        print ("\n//IT'S THE USER'S TURN//")
+        while True:
+            try:
+                space = int(input("please enter a number between 0-8 for your move: "))
+                if space not in range(0,9):
+                    print("this number is not between 0-8") 
+                    continue
+                if space in userSpaces or space in compSpaces: 
+                    print("this space has already been used.")
+                    continue
+                break 
+            except ValueError:
+                print ("that is not a valid number. Please try again. ")
+
+        userSpaces.append(space) 
         
-    if turn%2 == 0: #if turn is even 
-        print("\n//PLAYER ONE'S TURN//")
-        move = player1 
-
+    
     else:
-        print("\n//PLAYER TWO'S TURN//")
-        move = player2
-
-    while True:
-        try:
-            space = int(input("please enter a number between 0-8 for your move: "))
-            if space not in range(0,9):
-                print("this number is not between 0-8") 
-                continue
-            if space in p1 or space in p2:
-                print("this space has already been used.")
-                continue
-            break 
-        except ValueError:
-            print ("that is not a valid number. Please try again. ")
-
-
-    spacesUsed[turn%2].append(space) 
-
-    board[int(space/3)][space%3] = move
+        print("\n//IT'S THE COMPUTER'S TURN//")
+        move = playersMoves[turn%2][1] 
+        space = compAI(turn, userSpaces, compSpaces)
+        compSpaces.append(space) 
+        
+    row = space//3
+    column = space%3 
+    board[row][column] = move
     
     printBoard(board)
     
-if winner != "":
-    print ("THE WINNER IS", winner)
-
-else:
-    print ("NO ONE WON. :(") 
+print ("THE WINNER IS: ", winner) 
+"""
+        
