@@ -10,45 +10,49 @@ winStates = [ [0,1,2],
               [2,4,6]
              ] 
 
-userSpaces = [0, 2, 5, 3]
-compSpaces = [0, 4, 2, 8]
-
-userSet = set(userSpaces)
-compSet = set(compSpaces)
-
-for state in winStates:
-    stateSet = set(state)
-    if len(stateSet & compSet) == 2:
-        possibleMoves = [stateSet - compSet] 
-        move = random.choice(possibleMoves)
-        print (possibleMoves, move) 
-    if len(stateSet & userSet)== 2:
-        possibleMoves = [stateSet - userSet] 
-        move = random.choice(possibleMoves)
-        print (possibleMoves, move) 
-
-    
-        
-    
-    
-""" import random
+corners = [0, 2, 6, 8]
 
 def printBoard(aBoard):
     print ()
     for row in board:
         print (" | ".join(row))
-
-def compAI(turn, spaceListA, spaceListB):
-    corners = [0, 2, 6, 8]
+        
+def compAI(turn, userSpaces, compSpaces): 
     if turn == 0:
-        return random.choice(corners)
-
+        move = 4
+    elif turn == 1:
+        move = random.choice(corners)
     else:
-        return turn 
+        userSet = set(userSpaces)
+        compSet = set(compSpaces)
+
+        possibleMoves = set()  
+
+        for state in winStates:
+            stateSet = set(state)
+            if len(stateSet & compSet) == 2:
+                possibleMoves.update([stateSet - compSet])
+                possibleMoves = possibleMoves - (userSet & compSet)
+                possibleMoves = list(possibleMoves)
+                print (possibleMoves) 
+                move = random.choice(possibleMoves)
+                print ('comp moves', possibleMoves, move)
+                break 
+            elif len(stateSet & userSet)== 2:
+                possibleMoves.update([stateSet - userSet])
+                possibleMoves = possibleMoves - (userSet & compSet)
+                possibleMoves = list(possibleMoves)
+                print (possibleMoves) 
+                move = random.choice(possibleMoves)
+                print ('usermove ', possibleMoves, move)
+                break 
+
+            else:
+                move = (random.choice(corners))
+    return move 
     
             
-def checkWin(p1, p2):
-
+def checkWin(userSpace, compSpace):
     winner = "__NO ONE__" 
     winStates = [ [0,1,2],
                   [3,4,5],
@@ -59,24 +63,21 @@ def checkWin(p1, p2):
                   [0,4,8],
                   [2,4,6]
                  ]
-
     for state in winStates:
-        
-
+        if (compSpace == state) or (set(state) < set(compSpace)):
+           winner = "__THE COMPUTER__" 
+        if (userSpace == state) or (set(state) < set(userSpace)):
+            winner = "__YOU__"
     return winner
     
 board = [ ['0', '1', '2'] , ['3', '4', '5'] , ['6', '7', '8'] ] 
     
 playersMoves = [ ] 
-
 user = ''
 comp = ''
-
 userSpaces = []
 compSpaces = []
-
 user = input('would you like to be x or o? ')
-
 while (user != 'x') and  (user != 'o'): 
     user = input('that is not a valid choice. please try again: ')
     
@@ -84,32 +85,24 @@ if user == 'x':
     comp = 'o'
 else:
     comp = 'x' 
-
 userTurn = input("would you like to be player one or player two? please enter one or two: ")
 while (userTurn  != "one") and (userTurn != "two"): 
     userTurn = input("that is not a valid choice. the accepted answers are one or one: ")
-
 if userTurn == "one":
     playersMoves.append(['user', user])
     playersMoves.append(['comp', comp]) 
 else:
     playersMoves.append(['comp', comp]) 
     playersMoves.append(['user', user]) 
-
-
 print("these are the places where you can enter moves:")
 printBoard(board)
-
-
 for turn in range(9):
     if turn >= 4:  
-        winner = checkWin(p1Spaces, p2Spaces)
+        winner = checkWin(compSpaces, userSpaces)
         if winner != "__NO ONE__":
             break
-
     
     currentPlayer = playersMoves[turn%2][0] 
-
     if currentPlayer == 'user':
         move = playersMoves[turn%2][1] 
         print ("\n//IT'S THE USER'S TURN//")
@@ -125,7 +118,6 @@ for turn in range(9):
                 break 
             except ValueError:
                 print ("that is not a valid number. Please try again. ")
-
         userSpaces.append(space) 
         
     
@@ -142,5 +134,3 @@ for turn in range(9):
     printBoard(board)
     
 print ("THE WINNER IS: ", winner) 
-"""
-        
