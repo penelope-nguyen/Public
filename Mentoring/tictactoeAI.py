@@ -11,44 +11,28 @@ winStates = [ [0,1,2],
              ] 
 
 corners = [0, 2, 6, 8]
+center = 4 
 
 def printBoard(aBoard):
     print ()
     for row in board:
         print (" | ".join(row))
         
-def compAI(turn, userSpaces, compSpaces): 
-    if turn == 0:
-        move = 4
-    elif turn == 1:
-        move = random.choice(corners)
+def compAI(userSpaces, compSpaces):
+
+    allSpaces = userSpaces + compSpaces
+    
+    if center not in allSpaces: 
+        move = center 
     else:
-        userSet = set(userSpaces)
-        compSet = set(compSpaces)
-
-        possibleMoves = set()  
-
         for state in winStates:
-            stateSet = set(state)
-            if len(stateSet & compSet) == 2:
-                possibleMoves.update([stateSet - compSet])
-                possibleMoves = possibleMoves - (userSet & compSet)
-                possibleMoves = list(possibleMoves)
-                print (possibleMoves) 
-                move = random.choice(possibleMoves)
-                print ('comp moves', possibleMoves, move)
-                break 
-            elif len(stateSet & userSet)== 2:
-                possibleMoves.update([stateSet - userSet])
-                possibleMoves = possibleMoves - (userSet & compSet)
-                possibleMoves = list(possibleMoves)
-                print (possibleMoves) 
-                move = random.choice(possibleMoves)
-                print ('usermove ', possibleMoves, move)
-                break 
-
-            else:
-                move = (random.choice(corners))
+            compWinPoss = 0 
+            for num in state:
+                if num in compSpaces:
+                    winPoss += 1
+            if winPoss > 1:
+                return state not in compSpaces:
+            
     return move 
     
             
