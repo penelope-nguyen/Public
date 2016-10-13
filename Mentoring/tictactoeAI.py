@@ -10,13 +10,25 @@ winStates = [ [0,1,2],
               [2,4,6]
              ]
 
+userScores = [0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0,
+              0]
+
 diamond = [1,3, 5, 7]
 corners = [0, 2, 6, 8]
 center = 4
 availableSpaces = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
+
 board = [ ['0', '1', '2'] , ['3', '4', '5'] , ['6', '7', '8'] ] 
-    
+
+firstTurn = ['1', "one"]
+secondTurn = ['2', "two"] 
 playersMoves = [ ] 
 user = ''
 comp = ''
@@ -34,10 +46,11 @@ if user == 'x':
 else:
     comp = 'x' 
 
-userTurn = input("would you like to be player one or player two? please enter one or two: ")
-while (userTurn  != "one") and (userTurn != "two"): 
-    userTurn = input("that is not a valid choice. the accepted answers are one or two: ")
-if userTurn == "one":
+userTurn = input("would you like to be player one or player two? please enter 1/one or 2/two: ")
+while (userTurn not in firstTurn) and (userTurn not in secondTurn): 
+    userTurn = input("that is not a valid choice. the accepted answers are 1/one OR 2/two: ")
+    
+if userTurn in firstTurn:
     playersMoves.append(['user', user])
     playersMoves.append(['comp', comp]) 
 else:
@@ -52,16 +65,16 @@ for row in board:
     
 for turn in range(9):
 
+    if (turn >= 4):
+            if 3 in userScores:
+                winner = "__YOU__" 
+
     if winner != "__NO ONE__":
         break
     
     currentPlayer = playersMoves[turn%2][0]
 
     if currentPlayer == 'user':
-        if (turn >= 4):
-            for state in winStates:
-                if (set(userSpaces) == set(state)) or (set(state) < set(userSpaces)):
-                    winner = "__YOU__"
                 
         move = playersMoves[turn%2][1] 
         print ("\n★ IT'S THE USER'S TURN ★")
@@ -78,27 +91,32 @@ for turn in range(9):
             except ValueError:
                 print ("that is not a valid number. Please try again. ")
 
+        for i in range(8):
+            if space in winStates[i]:
+                userScores[i] += 1 
+        
         userSpaces.append(space)
-    
+
     else:
+        
         print("\n☆ﾟ IT'S THE COMPUTER'S TURN ☆ﾟ")
         move = playersMoves[turn%2][1]
-        
-wo        space = -1
+
+        space = -1
         winSpace = -2 
         defendSpace =  -3
         
-        if len(compSpaces) == 0:
+        if (len(compSpaces) == 0) and (len(userSpaces) == 0):
             space = random.choice(corners)
             
-        elif len(userSpaces) == 1:
+        elif (len(compSpaces) == 1) and (len(userSpaces) == 1):  
             if (userSpaces[0] in corners):
                 if (compSpaces[0] in corners):
                     space = center
                     center = -4
                 else:
                     while (space not in availableSpaces):
-                        space = random.choice(corners) 
+                        space = random.choice(corners)
             else:
                 while (space not in availableSpaces): 
                     space = random.choice(corners)
@@ -133,6 +151,7 @@ wo        space = -1
                 winner = "__ TAKKIE Σ(‘◉⌓◉’) __" 
             
             elif defendSpace >=0:
+                print ("pls") 
                 space = defendSpace
 
             else:
@@ -145,12 +164,13 @@ wo        space = -1
                         center = -4
                     else:
                         space = random.choice(diamond)
-                        diamond.remove(space) 
-                     
-        compSpaces.append(space)
-        print ("Σ(‘◉⌓◉’) takkie says: i marked space {}.".format(space)) 
+                        diamond.remove(space)
 
-        
+       
+        compSpaces.append(space)
+        print ("Σ(‘◉⌓◉’) takkie says: i marked space {}.".format(space))
+
+
     availableSpaces.remove(space) 
 
     row = space//3
