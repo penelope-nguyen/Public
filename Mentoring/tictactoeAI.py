@@ -10,7 +10,7 @@ winStates = [ [0,1,2],
               [2,4,6]
              ]
 
-diamond = [1, 3, 5, 7]
+diamond = [1,3, 5, 7]
 corners = [0, 2, 6, 8]
 center = 4
 availableSpaces = [0, 1, 2, 3, 4, 5, 6, 7, 8]
@@ -24,6 +24,7 @@ userSpaces = []
 compSpaces = []
 winner = "__NO ONE__" 
 
+print ("☆ﾟ.*･｡ﾟ welcome to penelope's tic-tac-toe game ☆ﾟ.*･｡ﾟ\n")
 user = input('would you like to be x or o? ')
 while (user != 'x') and  (user != 'o'): 
     user = input('that is not a valid choice. please try again: ')
@@ -43,7 +44,7 @@ else:
     playersMoves.append(['comp', comp]) 
     playersMoves.append(['user', user])
 
-    
+print("\nthis is your opponent: takkie Σ(‘◉⌓◉’)")     
 print("these are the places where you can enter moves:\n")
 
 for row in board: 
@@ -63,7 +64,7 @@ for turn in range(9):
                     winner = "__YOU__"
                 
         move = playersMoves[turn%2][1] 
-        print ("\n//IT'S THE USER'S TURN//")
+        print ("\n★ IT'S THE USER'S TURN ★")
         while True:
             try:
                 space = int(input("please enter a number between 0-8 for your move: "))
@@ -80,10 +81,10 @@ for turn in range(9):
         userSpaces.append(space)
     
     else:
-        print("\n//IT'S THE COMPUTER'S TURN//")
+        print("\n☆ﾟ IT'S THE COMPUTER'S TURN ☆ﾟ")
         move = playersMoves[turn%2][1]
         
-        space = -1
+wo        space = -1
         winSpace = -2 
         defendSpace =  -3
         
@@ -129,7 +130,7 @@ for turn in range(9):
 
             if winSpace >= 0:
                 space = winSpace
-                winner = "__THE COMPUTER__" 
+                winner = "__ TAKKIE Σ(‘◉⌓◉’) __" 
             
             elif defendSpace >=0:
                 space = defendSpace
@@ -147,6 +148,7 @@ for turn in range(9):
                         diamond.remove(space) 
                      
         compSpaces.append(space)
+        print ("Σ(‘◉⌓◉’) takkie says: i marked space {}.".format(space)) 
 
         
     availableSpaces.remove(space) 
@@ -159,4 +161,5 @@ for turn in range(9):
     for row in board: 
         print (" | ".join(row))
     
-print ("THE WINNER IS: ", winner) 
+print ("THE WINNER IS: ", winner)
+print ("Σ(‘◉▽◉’)☆ takkie says: thanks for playing!")
