@@ -1,0 +1,44 @@
+import glib
+from noise import pnoise2
+
+def pnoise_rgb(x, y, freq, octaves): 
+    return pnoise2(x/freq, y/freq, octaves)
+
+def scale(bottom, top, value):
+    orig_scale = 2.0
+    
+    new_scale = (top - bottom) / orig_scale 
+    scale = abs((-1 - value) * new_scale)
+    return scale
+
+def pnoise_list(width, height, freq, octaves):
+    list_of_lists = []
+    for w in range(width):
+        newList.append(
+    ''' for h in range(height):
+        someList = [] 
+        for w in range(width):
+            noises = pnoise_rgb(w, h, freq, octaves)
+            scaled_noises = int(scale(0, 255, noises))
+            someList.append(scaled_noises)
+        list_of_lists.append(someList)
+    ''' 
+    return list_of_lists
+""" 
+glib.open_window(800,600) 
+im = glib.create_image(50, 50)
+
+pixels = glib.get_pixels(im) 
+
+width, height = im.size
+
+myNoise = pnoise_list(width, height, 53.0, 10)
+for w in range(width):
+    for h in range(height):
+        colors = pixels.getpixel(w, h)
+        pixel = myNoise[w]
+        pixels.setpixel(w, h, ((pixel[0]), (pixel[1]), (pixel[2]))) 
+
+glib.show_image(im, 400, 300)
+
+""" 
