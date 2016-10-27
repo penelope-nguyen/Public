@@ -8,75 +8,24 @@ winStates = [ [0,1,2],
               [2,5,8],
               [0,4,8],
               [2,4,6]
-             ] 
+             ]
 
-userSpaces = [0, 2, 5, 3]
-compSpaces = [0, 4, 2, 8]
+diamond = [1,3, 5, 7]
+corners = [0, 2, 6, 8]
+center = 4
+availableSpaces = [0, 1, 2, 3, 4, 5, 6, 7, 8]
 
-userSet = set(userSpaces)
-compSet = set(compSpaces)
-
-for state in winStates:
-    stateSet = set(state)
-    if len(stateSet & compSet) == 2:
-        possibleMoves = [stateSet - compSet] 
-        move = random.choice(possibleMoves)
-        print (possibleMoves, move) 
-    if len(stateSet & userSet)== 2:
-        possibleMoves = [stateSet - userSet] 
-        move = random.choice(possibleMoves)
-        print (possibleMoves, move) 
-
-    
-        
-    
-    
-""" import random
-
-def printBoard(aBoard):
-    print ()
-    for row in board:
-        print (" | ".join(row))
-
-def compAI(turn, spaceListA, spaceListB):
-    corners = [0, 2, 6, 8]
-    if turn == 0:
-        return random.choice(corners)
-
-    else:
-        return turn 
-    
-            
-def checkWin(p1, p2):
-
-    winner = "__NO ONE__" 
-    winStates = [ [0,1,2],
-                  [3,4,5],
-                  [6,7,8],
-                  [0,3,6],
-                  [1,4,7],
-                  [2,5,8],
-                  [0,4,8],
-                  [2,4,6]
-                 ]
-
-    for state in winStates:
-        
-
-    return winner
-    
 board = [ ['0', '1', '2'] , ['3', '4', '5'] , ['6', '7', '8'] ] 
     
 playersMoves = [ ] 
-
 user = ''
 comp = ''
-
 userSpaces = []
 compSpaces = []
+winner = "__NO ONE__" 
 
+print ("☆ﾟ.*･｡ﾟ welcome to penelope's tic-tac-toe game ☆ﾟ.*･｡ﾟ\n")
 user = input('would you like to be x or o? ')
-
 while (user != 'x') and  (user != 'o'): 
     user = input('that is not a valid choice. please try again: ')
     
@@ -87,32 +36,35 @@ else:
 
 userTurn = input("would you like to be player one or player two? please enter one or two: ")
 while (userTurn  != "one") and (userTurn != "two"): 
-    userTurn = input("that is not a valid choice. the accepted answers are one or one: ")
-
+    userTurn = input("that is not a valid choice. the accepted answers are one or two: ")
 if userTurn == "one":
     playersMoves.append(['user', user])
     playersMoves.append(['comp', comp]) 
 else:
     playersMoves.append(['comp', comp]) 
-    playersMoves.append(['user', user]) 
+    playersMoves.append(['user', user])
 
+print("\nthis is your opponent: takkie Σ(‘◉⌓◉’)")     
+print("these are the places where you can enter moves:\n")
 
-print("these are the places where you can enter moves:")
-printBoard(board)
-
-
-for turn in range(9):
-    if turn >= 4:  
-        winner = checkWin(p1Spaces, p2Spaces)
-        if winner != "__NO ONE__":
-            break
-
+for row in board: 
+    print (" | ".join(row))
     
-    currentPlayer = playersMoves[turn%2][0] 
+for turn in range(9):
+
+    if winner != "__NO ONE__":
+        break
+    
+    currentPlayer = playersMoves[turn%2][0]
 
     if currentPlayer == 'user':
+        if (turn >= 4):
+            for state in winStates:
+                if (set(userSpaces) == set(state)) or (set(state) < set(userSpaces)):
+                    winner = "__YOU__"
+                
         move = playersMoves[turn%2][1] 
-        print ("\n//IT'S THE USER'S TURN//")
+        print ("\n★ IT'S THE USER'S TURN ★")
         while True:
             try:
                 space = int(input("please enter a number between 0-8 for your move: "))
@@ -126,21 +78,88 @@ for turn in range(9):
             except ValueError:
                 print ("that is not a valid number. Please try again. ")
 
-        userSpaces.append(space) 
-        
+        userSpaces.append(space)
     
     else:
-        print("\n//IT'S THE COMPUTER'S TURN//")
-        move = playersMoves[turn%2][1] 
-        space = compAI(turn, userSpaces, compSpaces)
-        compSpaces.append(space) 
+        print("\n☆ﾟ IT'S THE COMPUTER'S TURN ☆ﾟ")
+        move = playersMoves[turn%2][1]
         
+        space = -1
+        winSpace = -2 
+        defendSpace =  -3
+        
+        if len(compSpaces) == 0:
+            space = random.choice(corners)
+            
+        elif len(userSpaces) == 1:
+            if (userSpaces[0] in corners):
+                if (compSpaces[0] in corners):
+                    space = center
+                    center = -4
+                else:
+                    while (space not in availableSpaces):
+                        space = random.choice(corners) 
+            else:
+                while (space not in availableSpaces): 
+                    space = random.choice(corners)
+        else:
+            
+            for state in winStates:
+                compAvailSpaces = state.copy()
+                userAvailSpaces = state.copy() 
+            
+                winLevel = 0
+                threatLevel = 0 
+
+                for num in state:
+                    if (num in compSpaces):
+                        winLevel += 1
+                        compAvailSpaces.remove(num)
+                        
+                    if (num in userSpaces):
+                        threatLevel +=1
+                        userAvailSpaces.remove(num)
+
+                if (winLevel >= 2):
+                    if (compAvailSpaces[0] in availableSpaces):
+                        winSpace = compAvailSpaces[0]
+                        
+                elif (threatLevel >=2):
+                    if (userAvailSpaces[0] in availableSpaces):
+                        defendSpace = userAvailSpaces[0]
+
+            if winSpace >= 0:
+                space = winSpace
+                winner = "__ TAKKIE Σ(‘◉⌓◉’) __" 
+            
+            elif defendSpace >=0:
+                space = defendSpace
+
+            else:
+                while (space not in availableSpaces): 
+                    if len(corners) != 0:
+                        space = random.choice(corners)
+                        corners.remove(space)
+                    elif center >= 0:
+                        space = center
+                        center = -4
+                    else:
+                        space = random.choice(diamond)
+                        diamond.remove(space) 
+                     
+        compSpaces.append(space)
+        print ("Σ(‘◉⌓◉’) takkie says: i marked space {}.".format(space)) 
+
+        
+    availableSpaces.remove(space) 
+
     row = space//3
     column = space%3 
     board[row][column] = move
     
-    printBoard(board)
+    print ()
+    for row in board: 
+        print (" | ".join(row))
     
-print ("THE WINNER IS: ", winner) 
-"""
-        
+print ("THE WINNER IS: ", winner)
+print ("Σ(‘◉▽◉’)☆ takkie says: thanks for playing!")
