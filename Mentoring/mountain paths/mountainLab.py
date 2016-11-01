@@ -21,16 +21,14 @@ def scale(orig_scale, bottom, top, value):
     scale = abs((-1 - value) * new_scale)
     
     return int(scale) 
+
 def findNewScale(list_of_lists):
-    max_num = 0
-    min_num = 0 
-    list_length = len(list_of_lists[0])
+    min_num = int(list_of_lists[0][0])
+    max_num = int(list_of_lists[0][0])
     
     for someList in list_of_lists:
-        max_num = int(someList[0])
-        max_num = int(someList[0]) 
-        for i in range(1, list_length):
-            num = int(someList[i]) 
+        for num in someList:
+            num = int(num) 
             if num < min_num:
                 min_num = num
             if num > max_num:
@@ -53,29 +51,31 @@ def normalize(list_of_lists):
         new_list.append(new_line) 
     return new_list 
 
-def display(list_of_lists, width, height): 
-    glib.open_window(1000, 1000)
+def display(list_of_lists, width, height):
+    
+    glib.open_window(900, 900)
     img = glib.create_image(width, height)
     
     pixels = glib.get_pixels(img) 
     for w in range(width):
         for h in range(height):
-            color = pixels.getpixel( w, h)
+            color = pixels.getpixel(w, h)
             new_pixel = list_of_lists[h][w]
             pixels.setpixel(w, h, (new_pixel, new_pixel, new_pixel)) 
     return img 
 
 def greedy_walk(listOfLists, start_row, img, RGB):
     
-    width,height = img.size
-    column_limit = img.size[0] - 1
-    row_limit = img.size[1] - 1 
+    height = img.size[1] 
+    column_limit = img.size[0] - 1 
+    row_limit = height - 1 
     r, g, b, = RGB
     totals = []
-    paths = [] 
-    for h in range (start_row, row_limit):
+    paths = []
+    h = 0
+    w = 0 
+    for h in range (start_row, height):
         new_path = [(h, 0)]
-        paths.append(new_path)
         total_changes = 0
         row = h 
         for column in range(column_limit):
@@ -83,64 +83,62 @@ def greedy_walk(listOfLists, start_row, img, RGB):
             move_right = listOfLists[row][column + 1]
             best_move = abs(move_right - current_step)
             
-            if (row!= 0):
+            if (row!= 0 and column != column_limit):
                 move_up = listOfLists[row - 1][column + 1]
                 poss_move = abs(move_up - current_step)
                 if (poss_move < best_move):
                     best_move = poss_move
-                    row -= 1 
-            if (row != row_limit):
-                try: 
-                    move_down = listOfLists[row + 1][column + 1]
-                    poss_move = abs(move_down - current_step)
-                    if (poss_move < best_move):
-                        best_move = poss_move
-                        row += 1
-                except:
-                    print(row + 1, column + 1)  
+                    row -= 1
+                    
+            if (row != row_limit and column != column_limit):
+                move_down = listOfLists[row + 1][column + 1]
+                poss_move = abs(move_down - current_step)
+                if (poss_move < best_move):
+                    best_move = poss_move
+                    row += 1
+                    
             total_changes += best_move
             new_path.append((row, column + 1))  
-            if (row == row_limit and h != row_limit):
+            if (column == (column_limit - 1)): 
                 totals.append(total_changes)
                 paths.append(new_path)
-                print(row, h)
-            else:
-                pass
             pixels = glib.get_pixels(img) 
             pixels.setpixel(column + 1, row, (r, g, b))
-    print (len(paths))
-    print (paths[0]) 
-    print(paths[1]) 
+            
     glib.update()
-    glib.show_image(img, 500, 500) 
+    return paths, totals 
             
+def find_best_path(list_of_paths, totals, img):
+    least_elevation_change = totals[0]
+    best_path = 0 
+    totals_length = len(totals)
+    
+    for num in range(1, totals_length):
+        if totals[num] < least_elevation_change:
+            least_elevation_change = totals[num] 
+            best_path = num
             
-    """
-    for h in range(start_row, 10):
-        current_step = lists_of-lists[h][0]
-        best_move = abs(lists_of_lists[h][1] - current_step) 
-        for w in range(2, width):
-            possible_step = lists_of_lists[h][w]
-            move = current_step - possible_move 
-            if 
-            if move < best_move:
-                best_move = move
-                print(current_step, next_step)
-        print (best_move) 
-    """ 
-            
+    best_path = list_of_paths[best_path]
+    pixels = glib.get_pixels(img)
+    for coordinate in best_path:
+        x = coordinate[1] 
+        y = coordinate[0] 
+        pixels.setpixel(x, y, (51, 255, 51))
         
+    glib.update()
     
 def main():
-    
-    # f_name = input("Please enter a filename: ")
-    file_lists = read_file("Colorado_480x480")
-    width, height = find_width_height(file_lists) 
-    file_lists =  normalize(file_lists)
-    image = display(file_lists, width, height)
-    glib.show_image(image, 500, 500) 
     start = 0
-    color_triple = (255, 100, 100) 
-    greedy_walk(file_lists, start, image, color_triple) 
+    color_triple = (255, 100, 100)
+    
+    f_name = input("Please enter a filename: ")
+    print("Processing into image...") 
+    file_lists = read_file(f_name)
+    width, height = find_width_height(file_lists) 
+    file_lists = normalize(file_lists)
+    image = display(file_lists, width, height)
+    paths, elevation_totals = greedy_walk(file_lists, start, image, color_triple)
+    find_best_path(paths, elevation_totals, image)
+    glib.show_image(image, 450, 450)
     
 main()
