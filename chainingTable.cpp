@@ -1,4 +1,3 @@
-
 #include "chainingTable.h"
 #include <iostream>
 #include <fstream>
@@ -18,32 +17,37 @@ int main() {
 
 	// ct.printTable();
 	cout << endl << ct.averageSearchCost() << endl;
+
 	ofstream outfile;
 	outfile.open("not_words.txt");
 	ifstream poe;
 	poe.open("raven.txt");
 	while (poe >> word) {
-		string new_word;
+		string new_word = "";
 		int length = word.length();
-
+		
 		for (int i = 0; i < length; i++) {
+			char letter = word.at(i);
 			int ascii = word.at(i);
 
-			if (ascii >= 97 && ascii <= 122)
-				new_word += char(ascii);
-			else if (ascii >= 65 && ascii <= 90)
-				new_word += char(ascii);
+			if (ascii > 64 && ascii < 91)
+				new_word += letter;
+			else if (ascii > 96 && ascii < 123)
+				new_word += letter;
 			else {
-				if (i < length - 1)
-					cout << new_word << " ";
-					
+				if (new_word.length() != 0) {
+					if (!ct.contains(new_word))
+						outfile << new_word << endl;
+				}
 				new_word = "";
 				continue;
 			}
 
 		}
-		cout << new_word << " ";
-		
+		if (new_word.length() != 0) {
+			if (!ct.contains(new_word))
+				outfile << new_word << endl;
+		}
 	}
 	outfile.close();
 	file.close();
