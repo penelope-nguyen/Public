@@ -1,29 +1,33 @@
 
 #include <iostream>
 #include <string>
-using namespace std; 
+using namespace std;
 
+template <class THING>
 class linkedList {
-private: 
+private:
 	class node {
 	public:
-		string data;
+		THING data;
 		node * next;
-		
-		node(string x) {
+		node * prev;
+
+		node(THING x) {
 			data = x;
 			next = NULL;
+			prev = NULL;
 		}
 	};
 
-	
-public: 
+
+public:
 	node * root;
 	node * tail;
 	int listSize;
 
 	linkedList() {
 		root = NULL;
+		tail = NULL;
 		listSize = 0;
 	}
 
@@ -31,18 +35,21 @@ public:
 		return listSize;
 	}
 
-	void insert(string x) {
+	void insert(THING x) {
 		node * newest = new node(x);
-		if (root == NULL)
+		if (root == NULL) 
 			root = newest;
-		else 
+		else {
 			tail->next = newest;
-		
+			newest->prev = tail;
+		}
+	
 		tail = newest;
+		
 		listSize += 1;
 	}
 
-	bool contains(string x) {
+	bool contains(THING x) {
 		node * p = root;
 		while (p != NULL) {
 			if (p->data == x)
@@ -51,4 +58,21 @@ public:
 		}
 		return false;
 	}
+
+	void push_back(THING x) {
+
+		node * newest = new node(x);
+		newest->next = root;
+		root->prev = newest;
+		root = newest; 	
+	}
+
+	void display() {
+		node * current = root; 
+		while (current != NULL) {
+			cout << current->data << endl;
+			current = current->next;
+		}
+	}
+
 };
