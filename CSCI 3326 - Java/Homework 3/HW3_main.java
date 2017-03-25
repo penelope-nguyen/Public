@@ -1,6 +1,6 @@
-
 import java.io.FileNotFoundException;
 import java.util.Scanner;
+
 public class HW3_main { 
 	
 	public static void main (String [] args) throws FileNotFoundException { 
@@ -10,14 +10,17 @@ public class HW3_main {
 		Inventory carInventory = new Inventory("inventory.txt");
 	
 		System.out.println("Welcome to Carmax!\n");
+		
 		do {
 			
 			Menus.displayMenu();
 			System.out.print("Please input your choice: ");
 			choice = in.nextInt();
 			System.out.println();
+			
 			if (choice == 3) 
 				break;
+			
 			else if (choice == 1) {
 				System.out.print("Please input your user id: ");
 				String username = in.next();
@@ -35,50 +38,46 @@ public class HW3_main {
 							int adminChoice = in.nextInt();
 							System.out.println();
 
-							if (adminChoice == 1) {
+							if (adminChoice == 1) 
 								carInventory.displayAll();
-							}
-							else if (adminChoice == 2) { 
+								
+							else if (adminChoice == 2)  
 								carInventory.add();
-							}
 							
-							else if (adminChoice == 3) { 
+							else if (adminChoice == 3)  
 								carInventory.delete();
-							}
 							
-							else if (adminChoice == 4) { 
+							else if (adminChoice == 4)  
 								carInventory.update();
-							}
 							
-							else if (adminChoice == 5) { 
+							else if (adminChoice == 5) 
 								members.displayAll();
-							}
 							
-							else if (adminChoice == 6) { 
+							else if (adminChoice == 6) 
 								members.adminAdd();
-							}
 							
-							else if (adminChoice == 7) { 
+							else if (adminChoice == 7) 
 								members.delete();
-							}
 							
-							else if (adminChoice == 8) { 
+							else if (adminChoice == 8) 
 								members.update();
-							}
 							
 							else if (adminChoice == 9) { 
+								System.out.println("Logging out admin...\n");
 								break;
 							}
 							
-							else { 
+							else 
 								System.out.println("Not a valid choice! Please try again. ");
-							}
+							
 						} while (true);
 					}
+					
 					else { 
 					System.out.println("Invalid name or password.\n");
 					continue;
 					}
+					
 				}
 				
 				else { 
@@ -92,16 +91,16 @@ public class HW3_main {
 							Menus.displayWelcome(user);
 							insideChoice = in.nextInt();
 							System.out.println();
-							if (insideChoice == 1) { 
+							if (insideChoice == 1) 
 								carInventory.displayAll();
-							}
-							
-							else if (insideChoice == 2) { 
+								
+							else if (insideChoice == 2)
 								 carInventory.sort();
-							}
 							
-							else if (insideChoice == 3) 
+							else if (insideChoice == 3) {
+								System.out.println("Logging out...Goodbye " + user.fn + " " + user.ln + "~\n");
 								break;
+							}
 
 							else { 
 								System.out.print("Not a valid choice. Please try again");
@@ -117,15 +116,17 @@ public class HW3_main {
 				System.out.println("Thank you for your sign up!\n");
 				continue;
 			}
-			else {
-				System.out.println("Not a valid choice.");
-			}
 			
-		}while (true);
-		System.out.println("Thank you!");
+			else
+				System.out.println("Not a valid choice.");
+			
+		} while (true);
 		
-		carInventory.updateInventory("newCars.txt");
-		members.updateCustomers("newCustomers.txt");
+		System.out.println("Thank you for using Carmax! Goodbye~");
+		
+		carInventory.updateInventory("cars.txt");
+		members.updateCustomers("customers.txt");
+		
 	}
 	
 }

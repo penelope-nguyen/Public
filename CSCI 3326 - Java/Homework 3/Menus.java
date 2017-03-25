@@ -1,6 +1,5 @@
-import java.nio.channels.MembershipKey;
-
 public class Menus {
+	
 	public static void displayMenu () {
 		System.out.print("1. Log in\n"
 			+ "2. Sign up\n"
@@ -34,9 +33,6 @@ public class Menus {
 				+ "5. Sort by Mileage \n"
 				+ "6. Sort by Price \n"
 				+ "7. Sort by Color \n\n");
-	}
-	public static void displayCars() { 
-		
 	}
 	
 	public static void displayUpdateCar() { 
