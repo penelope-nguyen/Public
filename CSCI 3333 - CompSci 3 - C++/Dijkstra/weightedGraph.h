@@ -1,19 +1,22 @@
 #include <iostream>
 #include <string>
-#include <list> //the stl's doubly linked list
-#include <string>
 #include <algorithm>
-#include "queue.h"
+#include <vector>
+#include <limits>
 using namespace std;
+
 
 class weightedGraph
 {
 private:
 	class vertex;
 	class edge;
-	class AVLTree;
+
+	vector<vertex*> vertexList;
+	int max_size;
 
 	class edge {
+	public:
 		vertex * start;
 		vertex * end;
 		int weight;
@@ -23,354 +26,226 @@ private:
 			end = e;
 			weight = w;
 		}
-
 	};
-
 	class vertex
 	{
 	public:
+
 		int data;
-		AVLTree * adjList;
+		vector<edge*>adjList;
 		vertex * parent;
 		bool visited;
 		int weight;
+		int index;
 
 		vertex(int x)
 		{
 			data = x;
-			adjList = new AVLTree();
 		}
 
 	};
 
-	class AVLTree
-	{
+
+	class minHeap {
+		vector <vertex*> heap;
 	private:
-		class node
-		{
-		public:
-			vertex * vertex_node;
-			int edge_weight;
-			int height;
-			node * left;
-			node * right;
+		void bubbleUp(int child) {
+			int parent;
 
-			node(vertex * v, int e)
-			{
-				vertex_node = v;
-				edge_weight = e;
-				height = 0;
-				left = NULL;
-				right = NULL;
-			}
-		};
-
-		node * root = NULL;
-
-		//insert x into tree rooted at p
-		void insert(vertex * v, int e, node * &p)
-		{
-
-			if (p == NULL)
-			{
-				p = new node(v, e);
-			}
+			if (child % 2 == 0)
+				parent = (child - 2) / 2;
 			else
-			{
-				if (v->data < p->vertex_node->data)
-				{
-					//put in left subtree
-					insert(v, e, p->left);
+				parent = (child - 1) / 2;
+
+			if (parent >= 0) {
+				if (heap[parent]->weight > heap[child]->weight) {
+					swap(heap[parent]->index, heap[child]->index);
+					swap(heap[parent], heap[child]);
+					bubbleUp(parent);
 				}
 				else
-				{
-					//put in right subtree
-					insert(v, e, p->right);
-				}
-
-				updateNodeHeight(p);
-
-				if (isUnbalanced(p)) {
-					rotate(p);
-				}
+					return;
 			}
 		}
 
+		void bubbleDown(int index) {
+			int size = heap.size() - 1;
+			int left = (2 * index) + 1;
+			int right = (2 * index) + 2;
+			int smallest = index;
 
-		void subtreeHeight(node *p, int &left, int &right) {
-			// returns height of left and right subtrees (children)
-			// most useful method 10/10 
+			if (left > size) {
+				return;
+			}
+			if (heap[left]->weight < heap[smallest]->weight)
+				smallest = left;
 
-			left = -1;
-			right = -1;
+			if (right <= size) {
+				if (heap[right]->weight < heap[smallest]->weight)
+					smallest = right;
+			}
 
-			if (p->left != NULL)
-				left = p->left->height;
+			if (smallest != index) {
+				swap(heap[smallest]->index, heap[index]->index);
+				swap(heap[smallest], heap[index]);
+				bubbleDown(smallest);
+			}
+		}
+	public:
 
-			if (p->right != NULL)
-				right = p->right->height;
+		minHeap() {
+
 		}
 
-
-		void updateNodeHeight(node *& p) {
-
-			int left_child, right_child;
-			subtreeHeight(p, left_child, right_child);
-
-			p->height = 1 + max(left_child, right_child);
-
+		void insert(vertex * x) {
+			if (x->index == -1) {
+				x->index = heap.size() - 1;
+				heap.push_back(x);
+			}
+			bubbleUp(x->index);
 		}
 
-		bool isUnbalanced(node * p) {
+		vertex * extractMin() {
+			int size = heap.size() - 1;
+			vertex * minValue = heap[0];
+			swap(minValue->index, heap[size]->index);
+			swap(heap[0], heap[size]);
+			heap.pop_back();
+			bubbleDown(0);
+			return minValue;
+		}
 
-			int left_child, right_child;
-
-			subtreeHeight(p, left_child, right_child);
-
-			if (abs(left_child - right_child) > 1)
+		bool empty() {
+			if (heap.size() < 1)
 				return true;
 			else
 				return false;
-
 		}
 
-		void rotate(node * & p) {
+		void display() {
 
-			int l_child_height, r_child_height;
-			int l_Gchild_height, r_Gchild_height;
-			node * childNode;
-
-			subtreeHeight(p, l_child_height, r_child_height);
-
-
-			// CASE 1: LEFT ROTATION - LEFT CHILD AND GRANDCHILD HEIGHT ARE GREATER THAN THEIR COUNTERPARTS 
-			// CASE 2: LEFT RIGHT ROTATION - LEFT CHILD HEIGHT > RIGHT CHILD HEIGHT, 
-			//         BUT LEFT GRANDCHILD HEIGHT < RIGHT GRANDCHILD HEIGHT 
-
-			if (l_child_height> r_child_height) {
-
-				childNode = p->left;
-				subtreeHeight(childNode, l_Gchild_height, r_Gchild_height);
-				if (l_Gchild_height > r_Gchild_height)
-					leftRotation(p);
-				else
-					leftRight(p);
+			for (int i = 0; i < heap.size(); i++) {
+				cout << heap[i]->data << ": " << heap[i]->weight << endl;
 			}
-
-			// CASE 3: RIGHT ROTATION - RIGHT CHILD AND GRANDCHILD HEIGHT ARE GREATER THAN THEIR COUNTERPARTS 
-			// CASE 2: RIGHT ROTATION - RIGHT CHILD HEIGHT > LEFT CHILD HEIGHT, 
-			//         BUT RIGHT GRANDCHILD HEIGHT < LEFT GRANDCHILD HEIGHT 		
-			else
-			{
-				childNode = p->right;
-				subtreeHeight(childNode, l_Gchild_height, r_Gchild_height);
-
-				if (l_Gchild_height < r_Gchild_height)
-					rightRotation(p);
-				else
-					rightLeft(p);
-
-			}
-
-			updateNodeHeight(p->left);
-			updateNodeHeight(p->right);
-
-			updateNodeHeight(p);
-
+			cout << endl;
 		}
-
-		void leftRotation(node *&p) {
-
-			node * new_r_child = p;
-			node * new_parent = p->left;
-
-			new_r_child->left = new_parent->right;
-			new_parent->right = new_r_child;
-
-			if (root == p)
-				root = new_parent;
-
-			p = new_parent;
-
-		}
-		void rightRotation(node *&p) {
-
-
-			node * new_l_child = p;
-			node * new_parent = p->right;
-			new_l_child->right = new_parent->left;
-			new_parent->left = new_l_child;
-
-			if (root == p)
-				root = new_parent;
-
-			p = new_parent;
-		}
-		void leftRight(node *&p) {
-
-			node * new_r_child = p;
-			node * new_l_child = p->left;
-			node * new_parent = p->left->right;
-
-			new_l_child->right = NULL;
-			new_r_child->left = new_parent->right;
-			new_parent->right = new_r_child;
-			new_parent->left = new_l_child;
-
-			if (p == root)
-				root = new_parent;
-			p = new_parent;
-
-		}
-		void rightLeft(node *&p) {
-
-			node * new_l_child = p;
-			node * new_r_child = p->right;
-			node * new_parent = p->right->left;
-
-			new_r_child->left = new_parent->left;
-			new_l_child->right = NULL;
-			new_parent->left = new_l_child;
-			new_parent->right = new_r_child;
-
-			if (p == root)
-				root = new_parent;
-			p = new_parent;
-		}
-
-		void display(node * p)
-		{
-			if (p == NULL)
-			{
-			}
-			else
-			{
-				display(p->left);
-				cout << p->vertex_node->data << "|" << p->edge_weight << " ";
-				display(p->right);
-			}
-		}
-
-		vertex * pop(node * p) {
-
-			node * toDelete = root;
-
-			
-		}
-	public:
-AVLTree()
-{
-	root = NULL;
-}
-
-void insert(vertex *v, int e)
-{
-	insert(v, e, root);
-}
-
-void display()
-{
-	display(root);
-}
-
-int getHeight() {
-	return root->height;
-}
-
-vertex * pop() {
-	pop(root);
-}
-
 	};
-
-	vertex ** vertexList;
-	int max_size;
-
-public:
+	public:
 
 	weightedGraph(int n) {
-		vertexList = new vertex *[n];
-		for (int i = 0; i < n; i++) {
-			vertexList[i] = NULL;
+			max_size = n;
+			vertexList = vector<vertex*>(max_size);
 		}
-		max_size = n;
-	}
 
 	~weightedGraph()
-	{
-		//free all the (dynamically allocated) vertices.
-	}
-
-	//add a new vertex with data value x to the graph
-	void addVertex(string x)
-	{
-		int index = stoi(x);
-		if (vertexList[index] == NULL)
-			vertexList[index] = new vertex(index);
-	}
-
-	void findDirectedEdge(string x) {
-
-	}
-
-	void display() {
-
+		{
 		for (int i = 0; i < max_size; i++) {
-
-			if (vertexList[i] != NULL) {
-				cout << vertexList[i]->data << ": ";
-				vertexList[i]->adjList->display();
-				cout << endl;
+			delete vertexList[i];
+			vertexList[i] = NULL;
 			}
 		}
-		cout << endl;
-	}
 
-	vertex * findVertex(string v) {
+		void addVertex(string x)
+		{
 
-		int index = stoi(v);
+			int index = stoi(x);
+			if (vertexList[index] == NULL)
+				vertexList[index] = new vertex(index);
+		}
+		
+		void display() {
 
-		if (vertexList[index] != NULL)
+			for (int i = 0; i < max_size; i++) {
+				if (vertexList[i] != NULL) {
+					cout << vertexList[i]->data << ": ";
+					int adjListSize = vertexList[i]->adjList.size();
+					for (int j = 0; j < adjListSize; j++) {
+						cout << vertexList[i]->adjList[j]->end->data << "|" << vertexList[i]->adjList[j]->weight << " " ;
+					}
+					cout << endl;
+				}
+			}
+
+		}
+
+		vertex * findVertex(string v) {
+
+			int index = stoi(v);
+
 			return vertexList[index];
 
-	}
-
-	void addDirectedEdge(string x, string y, string e_weight) // int u 
-	{
-		vertex * x_vertex = findVertex(x);
-
-		vertex * y_vertex = findVertex(y);
-
-		if (x_vertex != NULL && y_vertex != NULL) {
-			x_vertex->adjList->insert(y_vertex, stoi(e_weight));
 		}
 
-	}
+		void addDirectedEdge(string x, string y, string e_weight) // int u 
+		{
+			vertex * x_vertex = findVertex(x);
+			vertex * y_vertex = findVertex(y);
 
-	//add a basic edge (going both directions) connect x and y
-	void addEdge(string x, string y, string e)
-	{
-		addDirectedEdge(x, y, e);
-		addDirectedEdge(y, x, e);
-	}
+			int edge_weight = stoi(e_weight);
+			if (x_vertex != NULL && y_vertex != NULL) {
 
-	void breadthFirstSearch(string x) {
-
-		vertex * start = vertexList[stoi(x)];
-
-		queue<int> Q;
-		Q.push(start->data);
-		start->visited = true;
-
-		while (!Q.empty()) {
-			for ()
+				edge * new_edge = new edge(x_vertex, y_vertex, edge_weight);
+				x_vertex->adjList.push_back(new_edge);
+			}
 		}
 
-	}
+		void addEdge(string x, string y, string e)
+		{
+			addDirectedEdge(x, y, e);
+			addDirectedEdge(y, x, e);
+		}
 
-	string shortestPath(string start, string end) {
-		
+		void Dijkstra(string x, string y) {
+			vertex * source = findVertex(x);
+			minHeap heap;
+			for (int i = 0; i < max_size; i++) {
+				vertexList[i]->visited = false;
+				vertexList[i]->parent = NULL;
+				vertexList[i]->weight = std::numeric_limits<int>::max(); // set weight to infinity 
+				vertexList[i]->index = -1;
+			}
 
-	}
+			source->weight = 0;
+			heap.insert(source);
 
+			while (!heap.empty()) {
+				vertex * current = heap.extractMin();
+				current->visited = true;
+				int size = current->adjList.size();
+				for (int i = 0; i < size; i++) {
+
+					vertex * neighbor = current->adjList[i]->end;
+
+					if (!neighbor->visited) {
+						int edgeWeight = current->weight + current->adjList[i]->weight;
+
+						if (edgeWeight < neighbor->weight) {
+							neighbor->weight = edgeWeight;
+							neighbor->parent = current;
+							heap.insert(neighbor);
+						} // bracket edgeWeight < neighbor
+					} // bracket !neighbor
+				} // bracket for loop 
+			} // while !heap.empty
+
+			
+			vertex * current = findVertex(y);
+			int cost = current->weight;
+			string path = "";
+			cout << "Computing shortest path from " << source->data << " to " << current->data << ": " << endl;
+			while (current->parent != NULL) {
+				path = "to " + to_string(current->data) + " " + path;
+				current = current->parent;
+			}
+
+			if (current == source) 
+				path = to_string(current->data) + " " + path;
+			else {
+				path = "No path was found.";
+				cost = -1;
+			}
+			cout << path << endl;
+			cout << "Cost is: " << cost << endl;
+		}
+	
 };
