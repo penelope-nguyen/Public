@@ -1,0 +1,18 @@
+Hello students,
+
+The goal of this assignment is to take one of the ideas
+you submitted (or a new one) and develop a home page for it.
+
+In order to do this, you must use Bootstrap 4 and start with the template provided.
+
+Here are the things I want for you to do:
+
+1. Change the contents of the <title></title> tag / 
+2. Have a cool headline and subheadline that gets across your unique value proposition and tells (or lets
+the reader infer) what the problem is. /
+3. Add a link under the subheadline for people to sign up / buy / try, you know the drill./
+4. Under that stuff add a row with three columns. In each of those columns have a headline, text,
+and a call to action (either a link or a button) describing 3 things. Either 3 features, 3 problems you solve,
+3 types of customers it might be good for, 3 something!/
+5. Under that add a section describing the solution. Be creative in how you design this section.
+6. Add a section describing pricing and add another call to action (sign up / buy / try, etc)
