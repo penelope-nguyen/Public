@@ -29,14 +29,17 @@ get '/new' do
 	erb :new
 end
 
+get '/redirect' do
+  redirect to('/')
+end
+
 post '/create' do
 
   @post = Post.new
   @post.title = params["title"]
   @post.body = params["body"]
   @post.save
-  return "Good job"
-
+  erb :posted
 
 end
 
