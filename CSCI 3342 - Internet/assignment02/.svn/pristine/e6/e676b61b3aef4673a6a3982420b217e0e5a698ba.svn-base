@@ -1,0 +1,4 @@
+$("#name").focus({
+});
+
+// Events for entering / leaving textbox is focus/in out and blur

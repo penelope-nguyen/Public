@@ -1,0 +1,43 @@
+$(function() {
+
+	function newComment() {
+
+		$("#original").show();
+		var comment = $("#original").clone();
+		$("#original").hide();
+		comment.attr("id", "");
+
+		return comment;
+	};
+
+	function getDate() {
+		var d = new Date();
+		return (d.getMonth() + 1).toString() + "/" + d.getDate().toString() + "/" + d.getFullYear().toString();
+
+	}
+
+	$("#original").hide();
+
+	$("#post-btn").click( function() {
+
+		var new_cmt = newComment();
+		var name = $("#username").val();
+		var text = $("#new_comment").val();
+		var date = getDate();
+
+		new_cmt.find("p").text(text);
+		new_cmt.find("h3").text(name);
+		new_cmt.find("h3").append('<span class = "date">' + " (" + date + ")"+ "</span>");
+
+		$("#comments").prepend(new_cmt);
+
+		return false;
+
+	});
+
+
+	$(document).on("click", '.delete', function() {
+		$(this).parents(".panel").remove();
+	});
+
+});

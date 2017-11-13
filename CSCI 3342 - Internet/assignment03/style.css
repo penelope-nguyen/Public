@@ -1,0 +1,12 @@
+.date {
+	font-style: italic;
+	font-size: 80%;
+}
+
+.alert{
+	display: none;
+}
+
+#original {
+	display: none;
+}

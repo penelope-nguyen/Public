@@ -1,0 +1,7 @@
+$("#post-btn").click( function() { 
+	console.log("Hello world!");
+	new_cmt = $("#comment").clone();
+	$("#comments").append(new_cmt);
+	return false; 
+
+});

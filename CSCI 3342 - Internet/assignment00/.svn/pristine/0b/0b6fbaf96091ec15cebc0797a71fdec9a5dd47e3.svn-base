@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en-US">
+<html>
+	<head>
+		<title>Penelope's page for CSCI3342.</title>
+		<meta charset="UTF-8">
+	</head>
+
+	<body>
+		<h1> A collection of Jojokes.</h1>
+
+		<h2>But first what is Jojo.</h2>
+			<img src = "jjba.jpg" style="width: 50%; height:50%;">
+			<p> Jojo is short for <em>Jojo's Bizarre Adventure</em>, a manga series written by Hirahiko Araki in the 1980's. The series spans 8 parts, each with a different protagonist from the Joestar bloodline. It is known for creating the concepts of <b> stands</b>, or punching ghosts, which are representations of a person's fighting drive. Though they possess supernatural abilites, stands are all very different from one another. Some merely assist the user in fighting, some distort the user's body, and some affect the environment around them.</p>
+
+			<p>To understand Jojokes, you must read the manga. I will try to explain some of my favorites anyways while avoiding spoilers, which will be either be tagged with [SPOILERS] or highlighted in black like so. </p>
+
+			<p><span style ="background-color:Black;">SPOILERS SPOILERS SPOILERS</span></p>
+
+		<h3>________ has no weaknesses. </h3>
+
+			<blockquote>...there's one I can say with more faith than anything in this world. Heart Attack has has no weaknesses. - Yoshikage Kira</blockquote>
+			<p>
+
+
+			This quote is uttered by a character in part 4 to symbolize his belief in the power of his stand. Sheer Heart Attack, does in fact, have a weakness. <span style ="background-color:Black;">Its automatic tracking makes it mindless to who it is attacking and eventually it returns to its owner.</span> The naviety of the claim made it rise to its current status as a popular quote and meme.
+			</p>
+
+			<img src="killer queen.jpg" style="width:30%; height:30%;">
+
+
+			<p> [SPOILERS] A <a href = "http://i0.kym-cdn.com/photos/images/original/001/112/984/58b.png" <a>picture making fun of Yoshikage's claims</a>, enumerating his weaknesses which include:
+				<ul>
+					<li> <span style ="background-color:Black;">Sheer Attack being a bomb ability, and bombs require oxygen</span>
+					<li> <span style ="background-color:Black;">His most powerful ability, Bites the Dust, attaches to someone else and leaves him without protection</span>
+					<li> <span style ="background-color:Black;">His desire to just live a peaceful life does not require him to be combat-thinking and under utilizes his stand's powers. </span>
+				</ul>
+			</p>
+
+		<h3>How does King Crimson work</h3>
+
+			<img src = "https://i.imgur.com/txzoelp.jpg" style="width:250px; height:250px;"><br>
+			<p>King Crimson is a stand belonging to a character in part 5: Venteo Aureo (Golden Wind). His ability is very...strange and hapharzardly explained, leaving many readers to become confused trying to figure out what exactly it does. Some say it is like <span style ="background-color:Black;">The Hand, a stand from part 4: Diamond is Unbreakable taht erases away, but with TIME instead. </span></p> Some readers have become <a href = "https://www.youtube.com/watch?v=Jm2D7ohWos0">very emotional. [SPOILERS]</a>
+
+		<h3> There is a best Jojo </h3>
+
+		<img src="jojos-bizarre-adventure-2.jpg" style="width:50%; height:50%">
+		<p> Here are the protagonists of the series, their stands, and the part they are featured in, listed chronologically. <br> Stands were introduced in part 3. </p>
+
+		<table style ="width:50%">
+				<tr>
+				<th> Part Name </th>
+				<th> Jojo </th>
+				<th> Stand </th>
+				</tr>
+			<tr>
+				<td>Phantom Blood</td>
+				<td>Jonathan Joestar</td>
+				<td>N/A</td>
+			</tr>
+
+			<tr>
+				<td>Battle Tendency</td>
+				<td>Joseph Joestar</td>
+				<td>N/A</td>
+			</tr>
+
+			<tr>
+				<td>Stardust Crusaders</td>
+				<td>Jotaro Kujo</td>
+				<td>Star Platinum</td>
+			</tr>
+
+			<tr>
+				<td>Diamond is Unbreakable</td>
+				<td>Josuke Higashikata</td>
+				<td>Crazy Diamond</td>
+			</tr>
+
+			<tr>
+				<td>Venteo Aureo</td>
+				<td>Giorno Giovanna</td>
+				<td>Gold Experience</td>
+			</tr>
+
+			<tr>
+				<td>Stone Ocean</td>
+				<td>Jolyne Cujoh</td>
+				<td>Stone Free</td>
+			</tr>
+
+			<tr>
+				<td>Steel Ball Run</td>
+				<td>Johnny Joestar</td>
+				<td>Tusk</td>
+			</tr>
+
+			<tr>
+				<td>Jojolion</td>
+				<td>Josuke Higashikata</td>
+				<td>Soft and Wet</td>
+			</tr>
+
+		</table>
+		<p>All the Jojo's are their own unique characters with nuanced personalities. You are confusing <i>best</i> with <i>favorite</i>. Those who claim there is a best Jojo are <b>heretics.</b>
+
+		<p> But the worst Jojo? <span style ="background-color:Black;">Joseph in part 3.</span></p>
+	</body>
+</html>

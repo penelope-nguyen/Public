@@ -1,0 +1,46 @@
+$(document).ready(function () {
+
+  $(".error").hide(); // hide all error messages
+
+  $("#name").focusin(function() {
+
+     $(this).focusout(function() {
+
+      var input = $(this).val();
+
+      if (!input) {
+        //$(this).after(message);
+        $(".error#name").show();
+      }
+      else {
+        $(".error#name").hide();
+      }
+    });
+  });
+
+  $("#DOB").focusin(function() {
+
+     $(this).focusout(function() {
+
+      var input = $(this).val();
+      if (moment(input).isValid()) {
+        var date = moment(input).format("MM/DD/YYYY");
+        $("#DOB").val(date);
+        $(".error#date").hide();
+      }
+      else {
+        $(".error#date").show();
+      }
+    });
+  });
+
+  $("#check").change(function() {
+     if ($(this).is(':checked'))
+      $("select").prop('disabled', false);
+     else {
+      $("select").prop('disabled', true);
+      $("select").val("");
+    }
+  });
+
+});

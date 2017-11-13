@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+  <html>
+    <head>
+      <title>JavaScript Input Validation</title>
+
+      <link rel="stylesheet" href="validation.css" />
+
+      <script src="http://code.jquery.com/jquery.js"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.18.1/moment.js"></script>
+  </head>
+
+  <body>
+
+    <h1 id="title">JavaScript Popup and Validation</h1>
+
+    <img class="popup-btn" id="menu-btn" src="death.jpg"/>
+
+    <div id="menu">
+      <img src="piggie.jpg" class="thumbnail" id="piggie"/>
+      <img src="duck.jpg" class="thumbnail" id="duck"/>
+      <img src="goat.jpg" class="thumbnail" id="goat"/>
+    </div>
+
+    <p>Yon Name: <input type="text" id="name"/><span class="error" id="name"> Please do not leave the name field blank!</span></p>
+
+    <p>Das Birth Datum: <input type="text" id="DOB"/><span class="error" id="DOB"> Invalid date, please try again.</span></p>
+
+    <p><input type="checkbox" id="check"/>I agree that if I choose something from this select box and it eats me, it's my fault.</p>
+
+    <p>
+      <select disabled>
+      <option></option>
+      <option>Bats</option>
+      <option>Cats</option>
+      <option>Rats</option>
+      </select>
+    </p>
+
+    <script src="validation.js"></script>
+    <script src="popup.js"></script>
+  </body>
+
+</html>

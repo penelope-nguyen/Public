@@ -1,0 +1,30 @@
+body {
+
+	background-color:LightSkyBlue; 
+	font-family: Helvetica;
+	padding-left: 10%;
+	padding-right: 10%;
+	background: linear-gradient(to right, LightSkyBlue, Aquamarine); 
+	
+}
+
+h1 {
+	font-size: 90px;
+	background:White;
+	text-align:Center;
+
+}
+
+h3 { 
+	font-size: 40px;
+	border-style:dashed;
+}
+
+img { 
+	display: block;
+	margin: auto;
+}
+table { 
+	text-align: left;
+
+}

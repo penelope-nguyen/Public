@@ -1,0 +1,5 @@
+
+var imgs = { 0 : "http://animalcontrolphx.com/wp-content/uploads/2013/05/gophers-400.jpg",
+             1 : "http://www.wildanimalfightclub.com/Portals/41405/images/wolv1.jpg",
+             2 : "https://www.waikikiaquarium.org/wp-content/uploads/2013/11/octopus_620.jpg"
+           }

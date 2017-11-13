@@ -1,0 +1,40 @@
+<html>
+
+<head>
+   <title>JavaScript Input Validation</title>
+
+   <link rel="stylesheet" href="validation.css" />
+
+   <script src="http://code.jquery.com/jquery.js"></script>
+
+</head>
+
+<body>
+
+<h1 id="title">JavaScript Popup and Validation</h1>
+
+<img class="popup-btn" id="menu-btn" src="death.jpg"/>
+
+<div id="menu">
+</div>
+
+<p>Yon Name: <input type="text"/></p>
+
+<p>Das Birth Datum: <input type="text"/></p>
+
+<p><input type="checkbox"/>I agree that if I choose something from this select box and it eats me, it's my fault.</p>
+
+<p>
+<select disabled>
+	<option></option>
+	<option>Bats</option>	
+	<option>Cats</option>	
+	<option>Rats</option>	
+</select>
+</p>
+
+<script src="validation.js"></script>
+
+</body>
+
+</html>

@@ -1,0 +1,29 @@
+$(document).ready(function() {
+  $("#menu").hide();
+
+  $("img").click(function() {
+    $("#menu").show();
+
+  });
+
+  $(".thumbnail").mouseover(function() {
+    $(this).css("border-color", "white");
+
+    $(this).css("border-style", "solid");
+
+    $(".thumbnail".mouseoff(function() {
+      $(this).css("border-color", "Black");
+
+
+    });
+  });
+
+
+  $(".thumbnail").click(function() {
+
+    $("body").attr('background', $(this).attr('src'));
+    $("#menu").hide();
+
+  });
+
+});

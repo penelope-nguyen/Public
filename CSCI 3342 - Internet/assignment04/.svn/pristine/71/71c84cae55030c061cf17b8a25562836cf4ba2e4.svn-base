@@ -1,0 +1,19 @@
+public class ItemList 
+{
+	public long ID {get; set;};
+	public string receive_time {get; set;};
+	public long sender{get; set}
+}
+
+$(function() {
+
+	// show/hide emails when click on headers
+	$("tr.email-header").click(function(){
+		$(this).next().eq(0).toggle();
+	});
+
+	// hide email on click
+	$("tr.email-body").click(function(){
+		$(this).hide();
+	});
+})

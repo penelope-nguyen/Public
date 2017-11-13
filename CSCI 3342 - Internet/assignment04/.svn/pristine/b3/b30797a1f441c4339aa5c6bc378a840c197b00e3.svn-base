@@ -1,0 +1,35 @@
+
+$(function() {
+	
+	/*
+	$.getJSON("email_list.js", function(items){
+		console.log("works!");
+		
+		$.each(items, function(i, val) { 
+			console.log(val.id);
+		}) 
+		})
+	.fail(function() {
+		console.log("broke!");
+	})
+	*/ 
+	var cloney_body = $(".email-body.original").clone();
+
+
+	var cloney_header = $(".email-header.original").clone();
+	addEmail(cloney_header, cloney_body);
+	function addEmail(header, body) { 
+		$("#email_list").prepend(body);
+		$("#email_list").prepend(header)
+	}
+	// show/hide emails when click on headers
+	$("tr.email-header").click(function(){
+		$(this).next().eq(0).toggle();
+	});
+
+	// hide email on click
+	$("tr.email-body").click(function(){
+		$(this).hide();
+	});
+	
+})

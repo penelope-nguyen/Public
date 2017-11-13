@@ -1,0 +1,14 @@
+<?php
+// include the data file to fake database data
+require_once("data.php");
+
+if ($_POST)  {
+  if (isset($_POST[''])) {
+  }
+}
+// do stuff!
+
+
+// include the view items page
+require_once("view_items.php");
+?>

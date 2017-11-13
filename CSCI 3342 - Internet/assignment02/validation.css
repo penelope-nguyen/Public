@@ -1,0 +1,25 @@
+#menu {
+  width:250px;
+  height: 150px;
+  background:Black;
+  position:absolute;
+  top: 20px;
+  left: 50px;
+  text-align:center;
+  opacity: .9;
+}
+
+.popup-btn {
+    width : 50px;
+}
+
+.thumbnail {
+    width:70px;
+    margin-left: auto;
+    margin-right: auto;
+}
+
+p.menu {
+  color:White;
+
+}
