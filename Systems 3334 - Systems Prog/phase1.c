@@ -7,7 +7,7 @@
 int main() {
     
     char input[100];
-
+    
     printf("Hello user! Welcome to Penelope's interpreter. Please enter inputs:\n");
     
     fgets(input, 100, stdin);
@@ -54,7 +54,7 @@ int main() {
             // is used as the array size for storage purposes
             char parsed_input[4][50];
             int word_len[4] = {0, 0, 0, 0};
-
+            
             int num_words = 0;
             int position = 0;
             
@@ -91,15 +91,23 @@ int main() {
                 printf("Command has too many parameters.");
             }
             
-            // both require the same amount of parameters, so for now
-            // they can be grouped together
-            else if (strcmp("load", parsed_input[0]) == 0 || strcmp("assemble", parsed_input[0]) == 0) {
+            else if (strcmp("load", parsed_input[0]) == 0) {
                 if (num_words < 2)
                     printf("input requires FILENAME parameter.");
                 else if (num_words > 2)
                     printf("input has too many parameters.");
                 else
-                    printf("Load input is correct, yet to be executed.");
+                    printf("Load command is correct, yet to be executed.");
+                
+            }
+            
+            else if (strcmp("assemble", parsed_input[0]) == 0) {
+                if (num_words < 2)
+                    printf("input requires FILENAME parameter.");
+                else if (num_words > 2)
+                    printf("input has too many parameters.");
+                else
+                    printf("Assemble command is correct, yet to be executed.");
                 
             }
             
@@ -135,6 +143,7 @@ int main() {
     }
     
     printf("\nThanks for using my interpreter!\n");
-        
+    
     return 0;
 }
+
