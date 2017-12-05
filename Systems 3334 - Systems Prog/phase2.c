@@ -109,6 +109,8 @@ void convertToHex(int num, char hex [16]) {
 }
 
 void parseLine(char inLine [], char lbl[], char opcde[], char oprand []) { 
+    
+    // MAKE SURE EVERYTHING IS CLEARED 
     for (int i = 0; i < 24; i++) { 
         lbl[i] = '\0';
         opcde[i] = '\0';
@@ -128,14 +130,13 @@ void parseLine(char inLine [], char lbl[], char opcde[], char oprand []) {
 
     position += 1;
     
-    // MOVE TO FIND THE OPCODE 
+    // IGNORE SPACES AFTER LABEL UNTIL A LETTER IS FOUND 
     for (position; position < len; position++) { 
         if (inLine[position] !=' ' && inLine[position] != '\t') 
             break;
     }
     
-    // PROCESSING OPCODE 
-    // RESET POSITION OF OPCODE 
+    // RESET POSITION OF OPCODE, THEN PROCESS OPCODE
     int var_pos = 0; 
     for (position; position < len; position++) { 
         if (inLine[position] == ' ' || inLine[position] == '\t') 
@@ -145,14 +146,13 @@ void parseLine(char inLine [], char lbl[], char opcde[], char oprand []) {
         var_pos++;
    }
    
-   //MOVE TO FIND OPERAND IGNORING SPACES 
+    // IGNORE SPACES AFTER OPCODE UNTIL A LETTER IS FOUND 
    for (position; position < len; position++) { 
         if (inLine[position] !=' ' && inLine[position] != '\t') 
             break;
     }
     
    // RESET POSITION OF OPERAND 
-   // CREATE TEMP ARRAY TO STORE THE CHARS BEFORE CONVERTING TO INT 
    var_pos = 0; 
    for (position; position < len; position++) { 
                
@@ -171,6 +171,7 @@ int reserveBYTE(char OP []) {
     int MAX_LEN;
     // LOOP THROUGH OPERAND 
     
+    // C = CHARACTER STRING, X = HEX STRING 
     if (OP[0] == 'C')
         MAX_LEN = 32;
     else if (OP[0] == 'X')
@@ -235,20 +236,22 @@ int main() {
         return 1; 
     }
     
+    ////////////////////// 
+    
     FILE *intermed = fopen("intermediate", "w");
     FILE *intermedErr = fopen("intermediateErr", "w");
     FILE *symfile = fopen("symboltable", "w");
 
-    ////////////////////// 
-    
     char line[128];
     char LABEL[24], OPCODE[24], OPERAND[24]; 
     char START_CODE[16] = {'\0'};
+    char MNEM_OPCODE[2];
     
-    char LOCCTR_HEX[16];
     int LOCCTR = 0;
-    int START = 0; 
+    char LOCCTR_HEX[16];
     
+    int START = 0; 
+        
     OPCODES * OPTABLE = makeOPTABLE(); 
     int OPTABLE_SIZE = 25; 
     
@@ -271,46 +274,57 @@ int main() {
 
     
     // READ FIRST INPUT LINE
-    
+
     fgets(line, 128, infile);
     parseLine(line, LABEL, OPCODE, OPERAND);
-    
-    // FILE ERROR 
-    bool opIsValid = false;
-    char MNEM_OPCODE[2];
-    
+        
     //IF OPCODE = 'START', SET LOCCTR = OPERAND 
     // ELSE, SET LOCCTR = 0 
+
     if (strcmp(OPCODE, "START") == 0) { 
         LOCCTR = (int)strtol(OPERAND, NULL, 16);
         START = LOCCTR; 
+        
         convertToHex(LOCCTR, LOCCTR_HEX);
+        
+        // IF THERE ISN'T ANYTHING FOLLOWING 'START', PLACE ERROR 
         if (OPERAND[0] == '\0')
             ERRORS[4] = '1';
-        fprintf(intermed, "%s", line);
-        fprintf(intermed, "%s %s 0 %s %s\n", LOCCTR_HEX, ERRORS, OPCODE, OPERAND);
+        else {
+            fprintf(intermed, "%s%s %s 0 %s %s\n", line, LOCCTR_HEX, ERRORS, OPCODE, OPERAND);
+        }
+        fprintf(intermedErr, "%s%s %s 0 %s %s\n", line, LOCCTR_HEX, ERRORS, OPCODE, OPERAND);
     }    
     
     while (!feof(infile)) {
         
-        
+        // READ IN LINE 
         fgets(line, 128, infile);
         
         // IF LINE IS A COMMENT LINE, IGNORE 
         if (line[0] == '.')
             continue;
             
+        // SPLIT LINE INTO LABEL, OPCODE AND OPERAND 
+        
         parseLine(line, LABEL, OPCODE, OPERAND);
-        char LOCCTR_HEX[16];
         convertToHex(LOCCTR, LOCCTR_HEX);
 
-        int PC = 0; 
-
+        int PC = 0;  // PC INDICATES HOW MUCH LOCATION COUNTER SHOULD INCREMENT 
+        bool opIsValid = false;
         resetErrorCode(ERRORS);
         
+        
+        // IF START_CODE IS EMPTY, THIS LINE IMMEDIATELY FOLLOWS START DIRECTIVE 
+        // KEEP TRACK OF ITS LABEL TO VERIFY END DIRECTIVE 
+        if (START_CODE[0] == '\0') {
+            strcpy(START_CODE, LABEL);
+        }
+        
         // IF LABEL FOUND, SEARCH SYMBOL TABLE 
-                    
         if (LABEL[0] != '\0') { 
+            
+            // IF THERE IS ALREADY 500 SYMBOLS, FLAG FOR ERROR 
             if (SYMBOL_TABLE.SIZE > 500) {
                 ERRORS[8]= '1';
             }
@@ -325,33 +339,7 @@ int main() {
             }
         }
         
-        if (strcmp(OPCODE,"END") == 0) { 
-            convertToHex(LOCCTR, LOCCTR_HEX);
-
-            fprintf(intermed, "%s", line);
-            
-            if (OPERAND[0] == '\0')
-                ERRORS[6] = '1';
-                
-            else if (strcmp(OPERAND, START_CODE) != 0)
-                ERRORS[7] = '1';
-            
-            if (!hasErrors(ERRORS)) {
-                fprintf(intermed, "%s\n%s %s 0 %s %s", line, LOCCTR_HEX, ERRORS, OPCODE, OPERAND);
-                fprintf(intermedErr, "%s\n%s %s 0 %s %s", line, LOCCTR_HEX, ERRORS, OPCODE, OPERAND);
-            } 
-            else { 
-                if (opIsValid)
-                    fprintf(intermedErr, "%s\n%s %s 0 %s %s", line, LOCCTR_HEX, ERRORS, OPCODE, OPERAND);
-                else 
-                    fprintf(intermedErr, "%s%s 0 %s", line, LOCCTR_HEX, ERRORS);
-            }
-
-            break;
-
-        }
-        
-        else if (strcmp(OPCODE,"WORD") == 0) { 
+        if (strcmp(OPCODE,"WORD") == 0) { 
             PC = 3; 
         }
         
@@ -365,6 +353,7 @@ int main() {
         
         else if (strcmp(OPCODE,"BYTE") == 0) {
             int RESERVE = reserveBYTE(OPERAND);
+            
             if (RESERVE > 0) { 
                 PC = RESERVE; 
             }
@@ -386,13 +375,35 @@ int main() {
             opIsValid = true;
             PC = 3;
         }
-        else { 
-            // ILLEGAL OPERATION 
-            ERRORS[1] = '1';
+        
+        else if (strcmp(OPCODE,"END") == 0) { 
+            
+            // MISSING OPERAND AFTER END 
+            if (OPERAND[0] == '\0')
+                ERRORS[6] = '1';
+            
+            // ILLEGAL OPERAND ON END (MUST BE SAME AS START OPERAND)
+            else if (strcmp(OPERAND, START_CODE) != 0)
+                ERRORS[7] = '1';
+            
+            if (!hasErrors(ERRORS)) {
+                fprintf(intermed, "%s\n%s %s 0 %s %s", line, LOCCTR_HEX, ERRORS, OPCODE, OPERAND);
+                fprintf(intermedErr, "%s\n%s %s 0 %s %s", line, LOCCTR_HEX, ERRORS, OPCODE, OPERAND);
+            } 
+            else { 
+                if (opIsValid)
+                    fprintf(intermedErr, "%s\n%s %s 0 %s %s", line, LOCCTR_HEX, ERRORS, OPCODE, OPERAND);
+                else 
+                    fprintf(intermedErr, "%s%s 0 %s", line, LOCCTR_HEX, ERRORS);
+            }
+
+            break;
+
         }
-                
-        if (START_CODE[0] == '\0') {
-            strcpy(START_CODE, LABEL);
+        
+        else { 
+            // OPERATION COULD NOT BE FOUND 
+            ERRORS[1] = '1';
         }
                 
         if (!hasErrors(ERRORS)) {
@@ -412,8 +423,10 @@ int main() {
     fclose(intermed);
     fclose(intermedErr);
     fclose(symfile);
+    
     char LENGTH[16];
     convertToHex((LOCCTR - START), LENGTH);
+    
     return 0; 
 
 }
